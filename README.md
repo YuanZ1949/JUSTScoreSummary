@@ -53,7 +53,7 @@
 
 你可以直接使用打包好的`exe可执行文件` 
 
-这里下载 [下载我]() , 双击即可运行 `Window` 系统下直接运行.
+这里下载 [下载请点我](https://github.com/YuanZ1949/JUSTScoreSummary/releases/tag/JUSTScoreSummary) , 双击即可运行 `Window` 系统下直接运行.
 
 
 
