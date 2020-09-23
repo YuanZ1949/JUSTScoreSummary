@@ -270,15 +270,15 @@ def add_academic_credits(table_df, ignore=True):
     '''
     table_num = table_df.shape[0]
     grade_point_sum = Decimal(0)   # 学分绩点
-    credit_sum = Decimal(0)      
-    point_list = []
-    repeat_list = [] # 用于去重每一表格内的课程(最高分课程)
+    credit_sum = Decimal(0)        # 总学分
+    grade_point_list = []
+    repeat_list = []               # 用于去重每一表格内的重复课程(得到最高分课程)
     for row_num in range(table_num):
         score  = table_df.iloc[row_num].loc['成绩']
-        credit = table_df.iloc[row_num].loc['学分']
+        credit = Decimal(table_df.iloc[row_num].loc['学分'])
         if isnull(credit): 
             get_table = table_filter(score_table, '课程号', [table_df.iloc[row_num].loc['课程号']])
-            credit = get_table.iloc[0].loc['学分']
+            credit = Decimal(get_table.iloc[0].loc['学分'])
         row_class = table_df.iloc[row_num].loc['课程号']
         #print(table_df.iloc[row_num]['课程名称'])
         point  = Decimal(0) # 绩点
@@ -293,7 +293,8 @@ def add_academic_credits(table_df, ignore=True):
                 '优':4.5,'良':3.5,'中':2.5,'及格':1.5,'不及格':0.0,
                 '通过':2.5,'不通过':0.0 }
             point = Decimal(point_dict[score])
-        point_list.append(point)
+
+        grade_point_list.append(credit*point)
         #print('=',credit_sum)
         if point == Decimal('0'):
             all_yes_pass = yes_pass(score_table, '成绩')
@@ -309,12 +310,12 @@ def add_academic_credits(table_df, ignore=True):
         if row_class in repeat_list:
             continue
         repeat_list.append(row_class)
-        grade_point_sum = grade_point_sum + Decimal(credit)*point
-        credit_sum = credit_sum + Decimal(credit)
+        grade_point_sum = grade_point_sum + credit*point
+        credit_sum = credit_sum + credit
         #print(table_df.iloc[row_num]['课程名称'])
         #print(Decimal(credit)*point,' ',grade_point_sum)
         
-    table_df.loc[:,'绩点'] = point_list
+    table_df.loc[:,'学分绩点'] = grade_point_list
     mean_grade_point = grade_point_sum/credit_sum
     #mean_grade_point = roundoff(mean_grade_point)
     return [table_df, eval(str(mean_grade_point)), eval(str(credit_sum))]
@@ -387,7 +388,7 @@ def generate_summary(file_name = ''):
     
     def next_row(add_num=1):
         '''
-        传入的数字最终传出的数字解读为"最后一行的下'add_num'行"
+        传入数字,最终传出的数字解读为"最后一行的下'add_num'行"
         '''
         # sheet.dimensions.split(':')[] 获取当前填充了数据的最大列和行
         row_id = sheet.dimensions.split(':')[1]
