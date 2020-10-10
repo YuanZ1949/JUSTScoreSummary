@@ -469,11 +469,11 @@ class Jwxtstu():
         else:
             wb.save(file_name+'.xlsx')
 
-def html_table(html_content):
+def html_table(html_content, num = 0):
     '''
     传入原始网页数据,提取网页内的表格数据,传出DataFrame形式的表格
     '''
-    table_df = read_html(html_content, encoding='utf-8', header=0)[0]
+    table_df = read_html(html_content, encoding='utf-8', header=0)[num]
     return table_df
 
 def table_xls(table_df, file_name):
@@ -490,7 +490,7 @@ def html_xls(html_content, file_name, num=0):
     传入原始网页数据, 保存网页内的表格为指定名字的.xls文件
     '''
     try:
-        table_df = html_table(html_content,num)
+        table_df = html_table(html_content, num)
         table_xls(table_df, file_name)
     except:
         print('转换失败')
