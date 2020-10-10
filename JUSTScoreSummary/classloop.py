@@ -1,5 +1,5 @@
 
-import RequestYourScore
+import JUSTScoreSummary as jss
 from os import system
 
 file = open('account.txt','r')
@@ -12,5 +12,6 @@ for i in a:
     print(account, len(account))
     print(password , len(password))
     print()
-    RequestYourScore.main(eval(account),password)
+    jss.main(eval(account),password)
+    print('-'*20)
     system('pause')
