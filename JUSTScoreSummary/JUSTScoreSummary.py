@@ -313,16 +313,22 @@ class Jwxtstu():
         all_year_credit = Decimal('0')
         for each_year in year_list:
             grade_point_1 = Decimal(term_dict[each_year+'-1'][1])*Decimal(term_dict[each_year+'-1'][2])
-            grade_point_2 = Decimal(term_dict[each_year+'-2'][1])*Decimal(term_dict[each_year+'-2'][2])
-            all_credit = Decimal(term_dict[each_year+'-1'][2])+Decimal(term_dict[each_year+'-2'][2])
-            year_mean_point = (grade_point_1 + grade_point_2) / all_credit
-            year_mean_point = eval(str(year_mean_point))
-
-            self.point_dict[each_year] = [year_mean_point,term_dict[each_year+'-1'],term_dict[each_year+'-2']]
-
-            all_year_grade_point = all_year_grade_point+grade_point_1+grade_point_2
-            all_year_credit = all_year_credit+all_credit
+            try:
+                grade_point_2 = Decimal(term_dict[each_year+'-2'][1])*Decimal(term_dict[each_year+'-2'][2])
+                all_credit = Decimal(term_dict[each_year+'-1'][2])+Decimal(term_dict[each_year+'-2'][2])
+                year_mean_point = (grade_point_1 + grade_point_2) / all_credit     
+                all_year_grade_point = all_year_grade_point+grade_point_1+grade_point_2  
+                year_mean_point = eval(str(year_mean_point))
+                self.point_dict[each_year] = [year_mean_point,term_dict[each_year+'-1'],term_dict[each_year+'-2']]
+            except KeyError :
+                all_credit = Decimal(term_dict[each_year+'-1'][2])
+                year_mean_point = grade_point_1 / all_credit
+                all_year_grade_point = all_year_grade_point+grade_point_1
+                year_mean_point = eval(str(year_mean_point))
+                self.point_dict[each_year] = [year_mean_point,term_dict[each_year+'-1']]
             
+            all_year_credit = all_year_credit+all_credit
+
         all_year_mean_point = all_year_grade_point / all_year_credit
         all_year_mean_point = eval(str(all_year_mean_point))
         self.point_dict['all_mean_point'] = all_year_mean_point
@@ -386,9 +392,13 @@ class Jwxtstu():
             sheet['A'+next_row(0)].font = font2
             sheet['C'+next_row(1)] = f'学年平均绩点:{roundoff(content[0])}'
             sheet['B'+next_row(2)] = f'学期:{year}-1'
-            sheet['D'+next_row(0)] = f'学期平均绩点:{roundoff(content[1][1])}'  
-            sheet['B'+next_row(2)] = f'学期:{year}-2'
-            sheet['D'+next_row(0)] = f'学期平均绩点:{roundoff(content[2][1])}'
+            sheet['D'+next_row(0)] = f'学期平均绩点:{roundoff(content[1][1])}' 
+            try:
+                sheet['B'+next_row(2)] = f'学期:{year}-2'
+                sheet['D'+next_row(0)] = f'学期平均绩点:{roundoff(content[2][1])}' 
+            except IndexError:
+                pass
+
             sheet['A'+next_row(1)] = ''
         
         # now_no_pass_table
@@ -447,12 +457,15 @@ class Jwxtstu():
             sheet['A'+next_row(1)] = ''
             sheet = table_openpyxl(content[1][0], sheet)
             
-            sheet['A'+next_row(2)] = f'学期:{year}-2'
-            sheet['C'+next_row(0)] = f'学期平均绩点:{roundoff(content[2][1])}'
-            sheet['A'+next_row(0)].font = font2
-            sheet['C'+next_row(0)].font = font2       
-            sheet['A'+next_row(1)] = ''
-            sheet = table_openpyxl(content[2][0], sheet)
+            try:
+                sheet['A'+next_row(2)] = f'学期:{year}-2'
+                sheet['C'+next_row(0)] = f'学期平均绩点:{roundoff(content[2][1])}'
+                sheet['A'+next_row(0)].font = font2
+                sheet['C'+next_row(0)].font = font2       
+                sheet['A'+next_row(1)] = ''
+                sheet = table_openpyxl(content[2][0], sheet)
+            except:
+                pass
             
             sheet['A'+next_row(1)] = ''
 
@@ -558,7 +571,7 @@ def main(stu_id, stu_password):
     except:
         print_exc()
         print()
-        print('出现如上错误,请确保账号可用以及网络正常')
+        print('出现如上错误,请确认账号可用以及网络正常亦或者程序是否拥有管理员权限')
         print('然后重试或者联系作者')
 
     finally:
@@ -568,7 +581,6 @@ def main(stu_id, stu_password):
 if __name__ == '__main__':
     
     import os
-
     # md = os.sys.argv[1]  
     print()
     print('载入中ing~')
@@ -576,7 +588,7 @@ if __name__ == '__main__':
     
     print('输入完数据后记得回车喔~')
     print()
-    account = int(input('请输入学号: '))
+    account  = int(input('请输入学号: '))
     password = input('请输入密码: ')
         
     main(account,password)

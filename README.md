@@ -2,9 +2,11 @@
 
 此程序主要用于`江苏科技大学2017级生物技术班`的**成绩统计**使用.
 
-可以快速把**单个**同学的`各学期/学年/总学分绩点`,`公选课总分/选课`,`未/已通过课程`等信息汇总在 `{name}-Summary.xlsx` 文件里.
+任何其他同学使用此程序可能会出现程序无法处理的问题而崩溃.
 
+请及时联系我进行维护,谢谢大家了^_^
 
+可以快速把**单个**同学的`各学期/学年/总学分绩点`,`公选课总分/选课`,`未/已通过课程`等信息汇总在 `{学号}-{姓名}-Summary.xlsx` 文件里.
 
 在此感谢17生物技术的各位同学们反馈的各种BUG.
 
@@ -29,15 +31,23 @@
 ## 特性 Features
 
 1. 命令行式界面
+
 2. 输入账号密码自动生成 `Summary` 文件
-3. 可将此项目做库导入使用,包含有如下实用函数:
-   - table_xls(table_df, file_name) : 将得到的DF(DataFrame)表按照输入的文件名导出xls文件
-   - public_elective(file_name=''): 返回`公选课`DF, 如果导入文件名直接输出xls
-   - theory_schedule(file_name = ''): 返回`学期理论课表`,~
-   - now_no_pass(): 返回尚`未通过的课程`
-   - training_program(file_name = ''): 返回`培养方案`,~
+
+3. 可将此项目做库导入使用,包含一个学生成绩相关的类,类有如下方法:
+
+   - public_elective(file_name=''): 返回`公选课`DF, 如果导入文件名直接输出xls,
+
+   - theory_schedule(file_name = ''): 返回`学期理论课表`,
+
+   - now_no_pass(): 返回尚`未通过的课程`,
+
+   - training_program(file_name = ''): 返回`培养方案`,
+
    - add_academic_credits(table_df, ignore=True):在传入的表的最右侧加一列`学分绩点`,并返回 修改过的表/表格内的平均绩点/总学分; `ignore`参数为在计算平均绩点和总学分的时候是否忽略公选课,体育课和补考通过的课程
+
    - point_summary(): 返回绩点字典,包含 总平均绩点/各学年学期绩点
+
    - ......
 
 
@@ -45,6 +55,7 @@
 由于是特定班级使用所以有一定的局限性
 
 - 公选课的识别可能只覆盖了自己班内部的,不够全面
+
 - 自动化的`Summary`文件只统计了需要的几个课程信息不一定是你需要的
 
 
@@ -53,7 +64,7 @@
 
 你可以直接使用打包好的`exe可执行文件` 
 
-这里下载 [下载请点我](https://github.com/YuanZ1949/JUSTScoreSummary/releases/tag/JUSTScoreSummary) , 双击即可运行 `Window` 系统下直接运行.
+这里下载 [下载请点我](https://github.com/YuanZ1949/JUSTScoreSummary/releases/tag/JUSTScoreSummary) , 双击即可运行 `Window` 系统下直接运行(建议右键以管理员模式运行,防止文件生成Excel时报错).
 
 
 
@@ -65,7 +76,7 @@
 
 > pip install -r requirements.txt
 
-这样就安装了需要的库, 然后运行:
+这样就安装了需要的库, 然后在终端输入指令:
 
 > python JUSTScoreSummary.py
 
@@ -76,6 +87,7 @@
 在该仓库的 `othertool` 里有些小工具
 
 - `classloop.py` : 可以将此py文件放在主要代码的同一目录, 然后在同目录自己创建一个 `account.txt` 文件, 里面按照`学号 密码`的形式一行放一位同学的账号, 启动程序后, 就可以按顺序生成不同同学的 `Summary`文件了.
+
 - `班级汇总宏(使用我合并文档).xlsm` : 得到的 `Summary` 文件使用这个文档里的`宏`来合并.
 
 

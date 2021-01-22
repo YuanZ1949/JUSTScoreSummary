@@ -8,15 +8,8 @@
             "name": "Python: cmd",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "E:\\LMplan\\MyHappyPlans\\Auto\\JUSTScoreSummary\\JUSTScoreSummary\\JUSTScoreSummary.py",
             "console": "internalConsole"
-        },
-        {
-            "name": "Python: pwsh",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal"
         }
     ]
 }
